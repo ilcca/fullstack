@@ -1,111 +1,68 @@
-import React, { useState } from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom'
 
-const Statistics = ({stats}) => {
-  console.log(stats)
-  return(
-    <div>
-      <h2>Statistics</h2>
-      <table>
-      <tbody>
-          <Statistic text = {stats.stat[0].text} value = {stats.stat[0].value}/>
-          <Statistic text = {stats.stat[1].text} value = {stats.stat[1].value}/>
-          <Statistic text = {stats.stat[2].text} value = {stats.stat[2].value}/>
-          <Statistic text = {stats.stat[3].text} value = {stats.stat[3].value}/>
-          <Statistic text = {stats.stat[4].text} value = {stats.stat[4].value}/>
-          <Statistic text = {stats.stat[5].text} value = {stats.stat[5].value}/>
-      </tbody>
-      </table>
-    </div>
-    )
-}
-const Statistic = ({text, value}) => {
-  if (isNaN(value)) {
-    return(
-      <tr>
-      <td>{text}</td><td></td>
-     </tr>
-  
-    )
-  }
-  else {
-    return(
-      <tr>
-        <td>{text}</td><td>{value}</td>
-      </tr>
-    )
-  }
-}
-const Button = ({handler, text}) => {
-  return(
-    <button onClick={handler}>
-    {text}
-  </button>
-  )
-}
 
 const App = () => {
-  // save clicks of each button to own state
-  const [good, setGood] = useState(0)
-  const [neutral, setNeutral] = useState(0)
-  const [bad, setBad] = useState(0)
-//  const [bad, setBad] = useState(0)
-
-  const addValue = (value, setter) => {
-    setter(value+1)
-  }
-
-  let all = good + bad + neutral
-  let average = (good - bad)/all
-  let positive = good/all
-  
-  const stats = {
-    stat: [
+  const course = {
+    name: 'Half Stack application development',
+    parts: [
       {
-        text: "good",
-        value: good
+        name: 'Fundamentals of React',
+        exercises: 10
       },
       {
-        text: "neutral",
-        value: neutral
+        name: 'Using props to pass data',
+        exercises: 7
       },
       {
-        text: "bad",
-        value: bad
-      },
-      {
-        text: "all",
-        value: all
-      },
-      {
-        text: "average",
-        value: average
-      },
-      {
-        text: "positive",
-        value: positive
+        name: 'State of a component',
+        exercises: 14
       }
-    ],
+    ]
   }
-
-
-
   return (
     <div>
-      <div>
-        <h2>give feedback</h2>
-        <Button handler={() => addValue(good, setGood)} text="good" />
-        <Button handler={() => addValue(neutral, setNeutral)} text="neutral" />
-        <Button handler={() => addValue(bad, setBad)} text="bad" />
-      </div>
-      <div>
-        <Statistics stats={stats} />
-      </div>
+      <Header course={course.name} />
+      <Content parts={course.parts} />
+      <Total parts={course.parts} />
     </div>
   )
 }
+const Header = (props) => {
+  return (
+    <h1>{props.course}</h1>
+  )
+}
 
+const Content = (props) => {
+  console.log(props)
+    
+  return (
+    <>
+    <Part part = {props.parts[0]} />
+    <Part part = {props.parts[1]} />
+    <Part part = {props.parts[2]} />
+    </>
+  )
+}
 
-ReactDOM.render(<App />, 
-  document.getElementById('root')
-)
+const Part = (props) => {
+  return (
+    <p>
+      {props.part.name} {props.part.exercises}
+    </p>
+  )
+}
+
+const Total = (props) => {
+  return (
+    <p>Number of exercises {
+      props.parts[0].exercises+
+      props.parts[1].exercises+
+      props.parts[2].exercises
+      }
+    </p> 
+  )
+}
+
+ReactDOM.render(<App />, document.getElementById('root'))
